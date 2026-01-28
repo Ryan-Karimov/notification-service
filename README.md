@@ -18,7 +18,7 @@
 - 🔗 **Webhooks** — уведомления о статусе доставки
 - 📊 **REST API** — полный CRUD с пагинацией
 - 📖 **Swagger UI** — интерактивная документация
-- 🐳 **Docker Ready** — готовые конфигурации
+- 🐳 **Docker** — готовые конфигурации для контейнеризации
 
 ## 🏗️ Архитектура
 
@@ -91,8 +91,8 @@ npm run worker
 
 ### Проверка
 
-- Health Check: http://localhost:3000/health
-- Swagger UI: http://localhost:3000/docs
+- Состояние сервиса: http://localhost:3000/health
+- Документация API: http://localhost:3000/docs
 
 ## 📚 API
 
@@ -126,7 +126,7 @@ VALUES ('my-secret-key', 'My App', 'https://myapp.com/webhook');
 | `PUT` | `/api/v1/templates/:id` | Обновить шаблон |
 | `DELETE` | `/api/v1/templates/:id` | Удалить шаблон |
 | `POST` | `/api/v1/templates/:id/preview` | Превью шаблона |
-| `GET` | `/health` | Health check |
+| `GET` | `/health` | Проверка состояния |
 
 ### Примеры
 
@@ -213,9 +213,9 @@ curl -X POST http://localhost:3000/api/v1/notifications \
 | `TWILIO_AUTH_TOKEN` | Twilio Auth Token | — |
 | `TWILIO_FROM_NUMBER` | Twilio номер телефона | — |
 
-## 🔄 Retry Strategy
+## 🔄 Стратегия повторных попыток
 
-Сервис использует экспоненциальный backoff:
+Сервис использует экспоненциальную задержку:
 
 | Попытка | Задержка |
 |---------|----------|
@@ -261,22 +261,22 @@ curl -X POST http://localhost:3000/api/v1/notifications \
 ## 🛠️ Разработка
 
 ```bash
-# Запуск в dev режиме с hot reload
+# Запуск в режиме разработки с автоперезагрузкой
 npm run dev
 
-# Запуск worker
+# Запуск воркера
 npm run worker
 
 # Проверка типов
 npm run typecheck
 
-# Линтинг
+# Проверка кода (линтинг)
 npm run lint
 
-# Сборка
+# Сборка проекта
 npm run build
 
-# Запуск в production
+# Запуск в продакшене
 npm start
 npm run worker:start
 ```
@@ -288,35 +288,35 @@ src/
 ├── config/           # Конфигурация
 ├── db/
 │   ├── migrations/   # SQL миграции
-│   └── repositories/ # Data Access Layer
+│   └── repositories/ # Слой доступа к данным
 ├── modules/
 │   ├── notifications/# API уведомлений
 │   ├── templates/    # API шаблонов
-│   ├── health/       # Health checks
-│   └── webhooks/     # Webhook delivery
+│   ├── health/       # Проверка состояния
+│   └── webhooks/     # Доставка вебхуков
 ├── queue/
-│   ├── workers/      # Queue consumers
-│   ├── connection.ts # RabbitMQ connection
-│   └── publisher.ts  # Message publishing
-├── channels/         # Email, Telegram, SMS
-├── middleware/       # Auth, Rate limit
-├── plugins/          # Fastify plugins
-├── templates/        # Handlebars engine
-├── types/            # TypeScript types
-├── utils/            # Logger, retry
-├── app.ts            # Fastify setup
-├── server.ts         # HTTP entry point
-└── worker.ts         # Worker entry point
+│   ├── workers/      # Обработчики очередей
+│   ├── connection.ts # Подключение к RabbitMQ
+│   └── publisher.ts  # Публикация сообщений
+├── channels/         # Каналы отправки
+├── middleware/       # Аутентификация, лимиты
+├── plugins/          # Плагины Fastify
+├── templates/        # Шаблонизатор Handlebars
+├── types/            # TypeScript типы
+├── utils/            # Логгер, утилиты
+├── app.ts            # Настройка Fastify
+├── server.ts         # Точка входа сервера
+└── worker.ts         # Точка входа воркера
 ```
 
 ## 📄 Лицензия
 
 MIT
 
-## 🤝 Contributing
+## 🤝 Участие в разработке
 
-1. Fork репозитория
-2. Создайте feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit изменения (`git commit -m 'Add amazing feature'`)
-4. Push в branch (`git push origin feature/amazing-feature`)
+1. Сделайте форк репозитория
+2. Создайте ветку для новой функции (`git checkout -b feature/amazing-feature`)
+3. Зафиксируйте изменения (`git commit -m 'Добавлена новая функция'`)
+4. Отправьте ветку в репозиторий (`git push origin feature/amazing-feature`)
 5. Откройте Pull Request
